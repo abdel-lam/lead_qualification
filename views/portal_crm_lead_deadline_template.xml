@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal -->
+    <template id="portal_my_home_menu_lead" name="Portal layout : lead menu entry" inherit_id="portal.portal_breadcrumbs" priority="15">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'Leads overdue' or leads" t-attf-class="breadcrumb-item #{'active ' if not lead else ''}">
+                <a t-if="lead" t-attf-href="/my/leads?{{ keep_query() }}">
+                    Leads overdue
+                </a>
+                <t t-else="">
+                    Leads overdue
+                </t>
+            </li>
+            <li t-if="lead" class="breadcrumb-item active">
+                <span t-field="lead.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_lead" name="Show Leads Overdue" customize_show="True" inherit_id="portal.portal_my_home" priority="15">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Leads Overdue</t>
+                <t t-set="url" t-value="'/my/leads'"/>
+                <t t-set="placeholder_count" t-value="'lead_count'"/>
+            </t>
+        </xpath>
+    </template>
+    <template id="portal_my_leads_custom" name="My Leads">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Leads</t>
+            </t>
+            <div t-if="not leads" class="alert alert-warning mt8" role="alert">
+                There are no leads.
+            </div>
+            <t t-if="leads" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Date d'Action</th>
+                        <th class="w-75">Name</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="leads" t-as="lead">
+                        <td><span t-field="lead.activity_date_deadline" t-options='{"widget": "date"}' /></td>
+                        <td>
+                            <a t-attf-href="/my/lead/#{lead.id}"><span t-field="lead.name"/></a>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+    <template id="portal_my_lead_custom" name="My Lead">
+        <t t-call="portal.portal_layout">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <span class="float-right" title="Rating" role="img" t-attf-aria-label="Rating: #{lead.priority} on 3">
+                                <t t-foreach="range(1, 4)" t-as="i">
+                                    <span t-attf-class="fa fa-lg fa-star#{'' if i &lt;= int(lead.priority) else '-o'}"/>
+                                </t>
+                            </span>
+                            <h4>
+                                Lead - <span t-field="lead.name"/>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row" t-if="lead.partner_name or lead.email_from or lead.partner_id">
+                                <label class="col-4">Customer</label>
+                                <address class="col-8">
+                                    <div>
+                                        <span t-if="lead.partner_name" itemprop="name" t-field="lead.partner_name" />
+                                        <span t-if="not lead.partner_name" itemprop="name" t-field="lead.contact_name"/>
+                                    </div>
+                                    <div t-if="lead.phone">
+                                        <span class="fa fa-phone" role="img" aria-label="Phone" title="Phone"/> <span itemprop="telephone" t-field="lead.phone" />
+                                    </div>
+                                    <div t-if="lead.mobile">
+                                        <span class="fa fa-mobile" role="img" aria-label="Mobile" title="Mobile"/> <span itemprop="telephone" t-field="lead.mobile" />
+                                    </div>
+                                    <div t-if="lead.email_from">
+                                        <span class="fa fa-envelope" role="img" aria-label="Email" title="Email"/> <span itemprop="email" t-field="lead.email_from" />
+                                    </div>
+                                </address>
+                            </div>
+                            <div class="row" t-if="lead.street or lead.street2 or lead.city or lead.state_id or lead.country_id">
+                                <label class="col-4">Address</label>
+                                <address class="col-8">
+                                    <div t-if="lead.street"><span t-field="lead.street"/></div>
+                                    <div t-if="lead.street2"><span t-field="lead.street2"/></div>
+                                    <div t-if="lead.city or lead.zip">
+                                        <span t-field="lead.city"/> <span t-field="lead.zip"/>
+                                    </div>
+                                    <div t-if="lead.state_id or country_id">
+                                        <span t-field="lead.state_id"/> <span t-field="lead.country_id"/>
+                                    </div>
+                                </address>
+                            </div>
+                            <div class="row" t-if="lead.user_id">
+                                <label class="col-4">Salesperson</label>
+                                <span class="col-8" t-field="lead.user_id" />
+                            </div>
+                            <div class="row" t-if="lead.team_id">
+                                <label class="col-4">Sales Team</label>
+                                <span class="col-8" t-field="lead.team_id" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="row" t-if="lead.date_deadline">
+                                <label class="col-4">Expected Closing</label>
+                                <span class="col-8" t-field="lead.date_deadline" />
+                            </div>
+                            <div class="row" groups="!base.group_portal" t-if="lead.tag_ids">
+                                <label class="col-4">Tags</label>
+                                <span class="col-8">
+                                    <t t-foreach="lead.tag_ids" t-as="tag">
+                                        <span class="badge badge-info" t-esc="tag.name" />
+                                    </t>
+                                </span>
+                            </div>
+                            <div class="row mt16" t-if="lead.partner_assigned_id">
+                                <label class="col-4">Assigned Partner</label>
+                                <address class="col-8" t-field="lead.partner_assigned_id" t-options='{"widget": "contact", "fields": ["name", "email", "phone"], "no_marker": True}'/>
+                            </div>
+                            <div class="row mt16" t-if="lead.campaign_id">
+                                <label class="col-4">Campaign</label>
+                                <span class="col-8" t-field="lead.campaign_id" />
+                            </div>
+                            <div class="row" t-if="lead.medium_id">
+                                <label class="col-4">Medium</label>
+                                <span class="col-8" t-field="lead.medium_id" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='mt8'>
+                <a role="button" href="#" class="btn btn-primary btn" data-toggle="modal" data-target=".modal_partner_assign_interested"><i class="fa fa-file-text-o"/> I'm interested</a>
+                <a role="button" href="#" class="btn btn-primary btn" data-toggle="modal" data-target=".modal_partner_assign_desinterested"><i class="fa fa-fw fa-times"/> I'm not interested</a>
+                <div class="modal fade modal_partner_assign_interested" role="form">
+                    <div class="modal-dialog">
+                        <form method="POST" class="js_accept_json modal-content js_website_submit_form interested_partner_assign_form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="lead_id" class="assign_lead_id" t-att-value="lead.id"/>
+                            <header class="modal-header">
+                                <h4 class="modal-title">Lead Feedback</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                            </header>
+                            <main class="modal-body" id="sign-dialog">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="comment">What is the next action? When? What is the expected revenue?</label>
+                                    <input type="text" name="comment" id="comment" class="form-control comment_interested"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label" for="customer_contacted">I have contacted the customer</label>
+                                    <input type="checkbox" name="customer_contacted" id="customer_contacted" class="contacted_interested"/>
+                                </div>
+                                <div>
+                                    <span class="text-danger error_partner_assign_interested" style="display:none;">You need to fill up the next action and contact the customer before accepting the lead</span>
+                                </div>
+                            </main>
+                            <footer class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button t-attf-class="btn btn-primary interested_partner_assign_confirm">Confirm</button>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+                <div role="dialog" class="modal fade modal_partner_assign_desinterested">
+                    <div class="modal-dialog">
+                        <form method="POST" class="js_accept_json modal-content js_website_submit_form desinterested_partner_assign_form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="lead_id" class="assign_lead_id" t-att-value="lead.id"/>
+                            <header class="modal-header">
+                                <h4 class="modal-title">Lead Feedback</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                            </header>
+                            <main class="modal-body" id="sign-dialog">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="comment">Why aren't you interested in this lead?</label>
+                                    <input type="text" name="comment" id="comment" class="form-control comment_desinterested"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label" for="contacted_desinterested">I have contacted the customer</label>
+                                    <input type="checkbox" name="contacted_desinterested" id="contacted_desinterested" class="contacted_desinterested"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label" for="customer_mark_spam">This lead is a spam</label>
+                                    <input type="checkbox" name="customer_mark_spam" id="customer_mark_spam" class="customer_mark_spam"/>
+                                </div>
+                                <div>
+                                    <span class="text-danger error_partner_assign_desinterested" style="display:none;">You need to fill up the next action and contact the customer before accepting the lead</span>
+                                </div>
+                            </main>
+                            <footer class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button t-attf-class="btn btn-primary desinterested_partner_assign_confirm">Confirm</button>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt32">
+                <div class="col-lg-12">
+                    <h4><strong>Message and communication history</strong></h4>
+                </div>
+                <div class="col-lg-10 offset-lg-1 mt16">
+                    <t t-call="portal.message_thread">
+                        <t t-set="object" t-value="lead"/>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+
+</odoo>

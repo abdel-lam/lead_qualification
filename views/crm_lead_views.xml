@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='mobile']" position="after">
                     <field name="close_date"
-                    attrs="{'invisible': [('type', '=', 'opportunity')]}"/>
+                    attrs="{'invisible': [('type', '!=', 'lead')]}"/>
             </xpath>
         </field>
     </record>
