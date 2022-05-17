@@ -3,10 +3,12 @@
     'author': 'lamrabti abdellatif',
     'summary': '',
     'description': "",
-    'website': '',
+    'website': "https://github.com/abdel-lam/lead_qualification",
     'depends': ['crm','mail'],
     'data': [
         'data/mail_activity_data.xml',
+        'report/report.xml',
+        'report/report_template.xml',
         'views/crm_lead_views.xml',
         'views/res_partner_views.xml',
         'views/portal_crm_lead_deadline_template.xml',

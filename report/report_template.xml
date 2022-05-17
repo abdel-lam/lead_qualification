@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="print_lead_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <table class="table table-sm o_main_table">
+                        <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th class="text-left">Piste</th>
+                                <th class="text-right">Client</th>
+                                <th class="text-right">Téléphone</th>
+                                <th class="text-right">date de la prochaine action</th>
+                                <th class="text-right">Equipe Commerciale</th>
+                                <th class="text-right">Commercial</th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="docs" t-as="doc">
+                            <t t-if="doc.activity_state == 'overdue' ">
+                                <tbody>
+                                    <td><span t-field="doc.name"/></td>
+                                    <td><span t-field="doc.partner_id.name"/></td>
+                                    <td><span t-field="doc.phone"/></td>
+                                    <td><span t-field="doc.activity_date_deadline"/></td>
+                                    <td><span t-field="doc.team_id"/></td>
+                                    <td><span t-field="doc.user_id"/></td>
+                                </tbody>
+                            </t>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
