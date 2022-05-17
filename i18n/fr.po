@@ -1,0 +1,30 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# lead_qualification
+#
+
+#. module: lead_qualification
+#: model:ir.model,name:lead_qualification.model_crm_lead
+msgid "Close date"
+msgstr "Date de fermeture"
+
+#. module: lead_qualification
+#: model:ir.model,name:lead_qualification.model_res_partner
+msgid "Lead in progress"
+msgstr "Pistes en cours"
+
+#. module: lead_qualification
+#: model_terms:ir.ui.view,arch_db:lead_qualification.portal_my_home_menu_lead
+#: model_terms:ir.ui.view,arch_db:lead_qualification.portal_my_home_lead
+msgid "Leads overdue"
+msgstr "Pistes: tâches en retard"
+
+#. module: lead_qualification
+#: model_terms:ir.ui.view,arch_db:lead_qualification.portal_my_leads_custom
+msgid "Leads"
+msgstr "Pistes"
+
+#. module: lead_qualification
+#: model_terms:ir.ui.view,arch_db:lead_qualification.portal_my_leads_custom
+msgid "There are no leads"
+msgstr ""

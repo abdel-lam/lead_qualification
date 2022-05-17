@@ -40,7 +40,7 @@
                 <thead>
                     <tr>
                         <th>Date d'Action</th>
-                        <th class="w-75">Name</th>
+                        <th class="w-75">Nom</th>
 
                     </tr>
                 </thead>
