@@ -1,0 +1,40 @@
+<odoo>
+    <record model="ir.ui.view" id="customer_lead_wizard">
+        <field name="name">customer.lead.wizard</field>
+        <field name="model">customer.lead</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="lead_states" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="piste"/>
+
+                        </group>
+
+                    </group>
+                </sheet>
+
+                <footer>
+                    <!--<button name="action_create" string="Créer" class="btn btn-success"
+                            type="object"/>-->
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="customer_lead_act" model="ir.actions.act_window">
+        <field name="name">Créer une piste</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">customer.lead</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="customer_lead_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

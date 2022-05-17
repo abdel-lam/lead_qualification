@@ -8,6 +8,10 @@
             <xpath expr="//page[@name='internal_notes']" position="after">
                 <page string="Lead in progress">
                     <field name="lead_id"/>
+                    <button name="%(customer_lead_act)d" string="Créer une piste"
+                             context="{'default_name':name}"
+                            class="btn-link"
+                            type="action"/>
                 </page>
             </xpath>
         </field>

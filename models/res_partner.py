@@ -5,4 +5,4 @@ class Partner(models.Model):
 
     _inherit = 'res.partner'
 
-    lead_id = fields.One2many('crm.lead', 'partner_id')
+    lead_id = fields.One2many('crm.lead', 'partner_id',domain=[('type','=','lead')])
