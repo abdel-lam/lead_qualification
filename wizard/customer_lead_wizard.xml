@@ -10,19 +10,19 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="name" readonly="1"/>
+                            <field name="name"/>
                         </group>
                         <group>
-                            <field name="piste"/>
-
+                            <field name="piste" attrs="{'invisible': [('lead_states', '=', 'new')]}"/>
                         </group>
-
                     </group>
                 </sheet>
 
                 <footer>
-                    <!--<button name="action_create" string="Créer" class="btn btn-success"
-                            type="object"/>-->
+                    <button name="create_lead" string="Créer" class="btn btn-success"
+                            type="object" attrs="{'invisible': [('lead_states', '=', 'new')]}"/>
+                    <button name="action_next" string="Suivant" class="btn btn-success"
+                            type="object" attrs="{'invisible': [('lead_states', '=', 'creat')]}"/>
                     <button string="Annuler" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
